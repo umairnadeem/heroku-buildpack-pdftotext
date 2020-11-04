@@ -12,8 +12,8 @@ echo ""
 mkdir -p $INSTALL_DIR
 cd $INSTALL_DIR
 curl $PACKAGE_URL -s | tar xz
-mkdir -p $INSTALL_DIR/pdftotext/bin
-mv xpdf-tools-linux-4.02/bin64/pdftotext $INSTALL_DIR/pdftotext/bin
+mkdir -p $INSTALL_DIR/xpdf/bin
+mv xpdf-tools-linux-4.02/bin64/* $INSTALL_DIR/xpdf/bin
 rm -rf xpdf-tools-linux-4.02
 
 echo "-----> Creating runtime environment"
