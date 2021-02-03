@@ -3,7 +3,7 @@
 BUILD_DIR=$1
 INSTALL_DIR=$BUILD_DIR/vendor
 PROFILE_DIR=$BUILD_DIR/.profile.d
-PACKAGE_URL="https://dl.xpdfreader.com/xpdf-tools-linux-4.02.tar.gz"
+PACKAGE_URL="https://dl.xpdfreader.com/xpdf-tools-linux-4.03.tar.gz"
 
 echo ""
 echo "-----> Installing"
