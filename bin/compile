@@ -3,7 +3,8 @@
 BUILD_DIR=$1
 INSTALL_DIR=$BUILD_DIR/vendor
 PROFILE_DIR=$BUILD_DIR/.profile.d
-PACKAGE_URL="https://dl.xpdfreader.com/xpdf-tools-linux-4.03.tar.gz"
+VERSION=4.03
+PACKAGE_URL="https://dl.xpdfreader.com/xpdf-tools-linux-$VERSION.tar.gz"
 
 echo ""
 echo "-----> Installing"
@@ -13,8 +14,8 @@ mkdir -p $INSTALL_DIR
 cd $INSTALL_DIR
 curl $PACKAGE_URL -s | tar xz
 mkdir -p $INSTALL_DIR/xpdf/bin
-mv xpdf-tools-linux-4.02/bin64/* $INSTALL_DIR/xpdf/bin
-rm -rf xpdf-tools-linux-4.02
+mv xpdf-tools-linux-$VERSION/bin64/* $INSTALL_DIR/xpdf/bin
+rm -rf xpdf-tools-linux-$VERSION
 
 echo "-----> Creating runtime environment"
 echo ""
