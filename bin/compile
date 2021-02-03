@@ -24,27 +24,44 @@ export_env_dir() {
 export_env_dir $ENV_DIR
 
 XPDF_VERSION="${XPDF_VERSION:-4.03}"
+echo "-----> Installing XPDF $XPDF_VERSION"
 
-INSTALL_DIR=$BUILD_DIR/vendor
-PROFILE_DIR=$BUILD_DIR/.profile.d
-PACKAGE_URL="https://dl.xpdfreader.com/xpdf-tools-linux-$XPDF_VERSION.tar.gz"
-
-echo ""
-echo "-----> Installing xpdf $XPDF_VERSION"
-echo ""
-
+VENDOR_DIR="$BUILD_DIR/vendor"
+INSTALL_DIR="$VENDOR_DIR/xpdf/bin"
 mkdir -p $INSTALL_DIR
-cd $INSTALL_DIR
-curl $PACKAGE_URL -s | tar xz
-mkdir -p $INSTALL_DIR/xpdf/bin
-mv xpdf-tools-linux-$XPDF_VERSION/bin64/* $INSTALL_DIR/xpdf/bin
-rm -rf xpdf-tools-linux-$XPDF_VERSION
+CACHE_BIN_DIR="$CACHE_DIR/xpdf"
+mkdir -p $CACHE_BIN_DIR
+CACHE_FILE="$CACHE_BIN_DIR/pdftotext"
+PROFILE_DIR="$BUILD_DIR/.profile.d"
+PACKAGE_DIR="xpdf-tools-linux-$XPDF_VERSION"
+PACKAGE_FILE="$PACKAGE_DIR.tar.gz"
+PACKAGE_URL="https://dl.xpdfreader.com/$PACKAGE_FILE"
 
-echo "-----> Creating runtime environment"
-echo ""
+# we only check if the one file is there since the cp will likely either
+# work or not
+if [ ! -f $CACHE_FILE ]; then
+  echo "-----> Downloading XPDF from $PACKAGE_URL"
+  wget $PACKAGE_URL -P $VENDOR_DIR | indent
 
+  if [ ! -f $VENDOR_DIR/$PACKAGE_FILE ]; then
+    echo "Error: Unable to download XPDF" | indent
+    ls $VENDOR_DIR | indent
+    exit 1;
+  fi
+
+  echo "-----> Extracting XPDF from $VENDOR_DIR/$PACKAGE_FILE"
+  tar xvf $VENDOR_DIR/$PACKAGE_FILE | indent
+
+  echo "-----> Caching XPDF installation"
+  cp $VENDOR_DIR/$PACKAGE_DIR/bin64/* $CACHE_BIN_DIR
+fi
+
+echo "-----> Copying binaries"
+cp $CACHE_BIN_DIR/* $INSTALL_DIR
+
+echo "-----> Setting up profile for XPDF"
 mkdir -p $PROFILE_DIR
-echo "export PATH=\"\$HOME/vendor/pdftotext/bin:\$PATH\"" >> $PROFILE_DIR/pdftotext.sh
+echo "export PATH=\"\$HOME/vendor/xpdf/bin:\$PATH\"" >> $PROFILE_DIR/xpdf.sh
 
 echo "-----> Done."
 echo ""
