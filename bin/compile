@@ -1,4 +1,5 @@
 #!/bin/bash
+set -ex
 
 indent() {
   sed -u 's/^/       /'
@@ -40,7 +41,6 @@ PACKAGE_URL="https://dl.xpdfreader.com/$PACKAGE_FILE"
 # we only check if the one file is there since the cp will likely either
 # work or not
 if [ ! -f $CACHE_FILE ]; then
-  echo "-----> Downloading XPDF from $PACKAGE_URL"
   wget $PACKAGE_URL -P $VENDOR_DIR | indent
 
   if [ ! -f $VENDOR_DIR/$PACKAGE_FILE ]; then
@@ -49,17 +49,14 @@ if [ ! -f $CACHE_FILE ]; then
     exit 1;
   fi
 
-  echo "-----> Extracting XPDF from $VENDOR_DIR/$PACKAGE_FILE"
+  cd $VENDOR_DIR
   tar xvf $VENDOR_DIR/$PACKAGE_FILE | indent
-
-  echo "-----> Caching XPDF installation"
   cp $VENDOR_DIR/$PACKAGE_DIR/bin64/* $CACHE_BIN_DIR
 fi
 
-echo "-----> Copying binaries"
+cd $BUILD_DIR
 cp $CACHE_BIN_DIR/* $INSTALL_DIR
 
-echo "-----> Setting up profile for XPDF"
 mkdir -p $PROFILE_DIR
 echo "export PATH=\"\$HOME/vendor/xpdf/bin:\$PATH\"" >> $PROFILE_DIR/xpdf.sh
 
