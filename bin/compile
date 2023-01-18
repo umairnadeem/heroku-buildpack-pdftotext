@@ -24,7 +24,7 @@ export_env_dir() {
 
 export_env_dir $ENV_DIR
 
-XPDF_VERSION="${XPDF_VERSION:-4.03}"
+XPDF_VERSION="${XPDF_VERSION:-4.04}"
 echo "-----> Installing XPDF $XPDF_VERSION"
 
 VENDOR_DIR="$BUILD_DIR/vendor"
